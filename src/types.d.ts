@@ -1,10 +1,10 @@
-export interface Movies {
-  Search: Search[]
+export interface Search {
+  Search: Movie[]
   totalResults: string
   Response: string
 }
 
-export interface Search {
+export interface Movie {
   Title: string
   Year: string
   imdbID: string
@@ -12,4 +12,4 @@ export interface Search {
   Poster: string
 }
 
-export type Type = 'movie' | 'series'
+export type Type = 'movie' | 'series' | string

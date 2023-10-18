@@ -5,11 +5,11 @@ export interface Search {
 }
 
 export interface Movie {
-  Title: string
-  Year: string
-  imdbID: string
-  Type: Type
-  Poster: string
+  title: string
+  year: string
+  id: string
+  type: Type
+  poster: string
 }
 
-export type Type = 'movie' | 'series' | string
+export type Type = 'movie' | 'series'

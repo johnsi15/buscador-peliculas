@@ -6,6 +6,7 @@ import './App.css'
 function App() {
   const { movies } = useMovies()
   const [query, setQuery] = useState('') // Forma controlada
+  const [error, setError] = useState<null | string>(null)
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault()
@@ -17,7 +18,28 @@ function App() {
   }
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = event => {
-    setQuery(event.target.value)
+    const { value } = event.target
+
+    if (value.startsWith(' ')) return
+
+    setQuery(value)
+
+    if (value === '') {
+      setError('No se pueden buscar peliculas vacias')
+      return
+    }
+
+    if (value.match(/^\d+$/)) {
+      setError('No se pueden buscar peliculas con un numero')
+      return
+    }
+
+    if (value.length < 3) {
+      setError('La busqueda debe tener al menos 3 caracteres')
+      return
+    }
+
+    setError(null)
   }
 
   return (
@@ -26,6 +48,7 @@ function App() {
         <h1>Buscador de películas</h1>
         <form className='form' onSubmit={handleSubmit}>
           <input
+            style={{ border: error ? '1px solid red' : 'none' }}
             onChange={handleChange}
             value={query}
             type='text'
@@ -34,6 +57,7 @@ function App() {
           />
           <button type='submit'>Buscar</button>
         </form>
+        {error && <p className='error'>{error}</p>}
       </header>
       <main>
         <Movies movies={movies} />

@@ -1,19 +1,9 @@
-// import responseNoMovies from './mocks/no-results.json'
-import responseMovies from './mocks/with-results.json'
 import './App.css'
 import { Movies } from './components/Movies'
-import { type Movie, Type } from './types'
+import { useMovies } from './hooks/useMovies'
 
 function App() {
-  const movies = responseMovies.Search
-
-  const mappedMovies: Movie[] = movies.map(movie => ({
-    id: movie.imdbID,
-    title: movie.Title,
-    year: movie.Year,
-    type: movie.Type as Type,
-    poster: movie.Poster,
-  }))
+  const { movies } = useMovies()
 
   return (
     <>
@@ -25,7 +15,7 @@ function App() {
         </form>
       </header>
       <main>
-        <Movies movies={mappedMovies} />
+        <Movies movies={movies} />
       </main>
     </>
   )

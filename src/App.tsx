@@ -1,12 +1,40 @@
-import { FormEventHandler, useState, ChangeEventHandler } from 'react'
+import { FormEventHandler, useState, ChangeEventHandler, useEffect } from 'react'
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
 import './App.css'
 
+function useSearch() {
+  const [search, updateSearch] = useState('') // Forma controlada
+  const [error, setError] = useState<null | string>(null)
+
+  useEffect(() => {
+    if (search.startsWith(' ')) return
+    updateSearch(search)
+
+    if (search === '') {
+      setError('No se pueden buscar peliculas vacias')
+      return
+    }
+
+    if (search.match(/^\d+$/)) {
+      setError('No se pueden buscar peliculas con un numero')
+      return
+    }
+
+    if (search.length < 3) {
+      setError('La busqueda debe tener al menos 3 caracteres')
+      return
+    }
+
+    setError(null)
+  }, [search])
+
+  return { search, updateSearch, error }
+}
+
 function App() {
   const { movies } = useMovies()
-  const [query, setQuery] = useState('') // Forma controlada
-  const [error, setError] = useState<null | string>(null)
+  const { search, updateSearch, error } = useSearch()
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault()
@@ -14,32 +42,13 @@ function App() {
     // const fields = Object.fromEntries(new FormData(event.currentTarget)) // Forma NO controlada
     // console.log(fields)
 
-    console.log({ query })
+    console.log({ search })
   }
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = event => {
     const { value } = event.target
 
-    if (value.startsWith(' ')) return
-
-    setQuery(value)
-
-    if (value === '') {
-      setError('No se pueden buscar peliculas vacias')
-      return
-    }
-
-    if (value.match(/^\d+$/)) {
-      setError('No se pueden buscar peliculas con un numero')
-      return
-    }
-
-    if (value.length < 3) {
-      setError('La busqueda debe tener al menos 3 caracteres')
-      return
-    }
-
-    setError(null)
+    updateSearch(value)
   }
 
   return (
@@ -50,7 +59,7 @@ function App() {
           <input
             style={{ border: error ? '1px solid red' : 'none' }}
             onChange={handleChange}
-            value={query}
+            value={search}
             type='text'
             name='query'
             placeholder='Avengers, The Matrix, Star Wars...'

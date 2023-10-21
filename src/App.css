@@ -15,6 +15,28 @@ form {
   align-items: center;
 }
 
+.movies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  padding: 0;
+  list-style: none;
+  gap: 10px;
+  width: 100%;
+}
+
+.movie {
+  text-align: center;
+}
+
+.movie img {
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.movie h3, .movie p {
+  margin: 0;
+}
+
 .error {
   color: red;
 }

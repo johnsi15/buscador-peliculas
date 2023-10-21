@@ -1,4 +1,4 @@
-import { FormEventHandler, useState, ChangeEventHandler, useEffect } from 'react'
+import { FormEventHandler, useState, ChangeEventHandler, useEffect, useRef } from 'react'
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
 import './App.css'
@@ -6,10 +6,15 @@ import './App.css'
 function useSearch() {
   const [search, updateSearch] = useState('') // Forma controlada
   const [error, setError] = useState<null | string>(null)
+  const isFirstInput = useRef(true)
 
   useEffect(() => {
+    if (isFirstInput.current) {
+      isFirstInput.current = search === ''
+      return
+    }
+
     if (search.startsWith(' ')) return
-    updateSearch(search)
 
     if (search === '') {
       setError('No se pueden buscar peliculas vacias')

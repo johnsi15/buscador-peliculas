@@ -1,9 +1,11 @@
-// import responseNoMovies from './mocks/no-results.json'
-import responseMovies from '../mocks/with-results.json'
+import { useState } from 'react'
+import responseNoMovies from '../mocks/no-results.json'
+import moviesResults from '../mocks/with-results.json'
 import { type Movie, Type } from '../types'
 
-export function useMovies() {
-  const movies = responseMovies.Search
+export function useMovies({ search }) {
+  const [responseMovies, setResponseMovies] = useState()
+  const movies = moviesResults.Search
 
   const mappedMovies: Movie[] = movies.map(movie => ({
     id: movie.imdbID,
@@ -13,5 +15,13 @@ export function useMovies() {
     poster: movie.Poster,
   }))
 
-  return { movies: mappedMovies }
+  const getMovies = () => {
+    if (search) {
+      setResponseMovies(moviesResults)
+    } else {
+      setResponseMovies(responseNoMovies)
+    }
+  }
+
+  return { movies: mappedMovies, getMovies }
 }

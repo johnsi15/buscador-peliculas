@@ -1,11 +1,11 @@
-export interface Search {
-  Search?: Movies[]
+export interface ApiResponse {
+  Search?: MovieApi[]
   totalResults?: string
   Response: string
   Error?: string
 }
 
-export interface Movies {
+export interface MovieApi {
   imdbID: string
   Title: string
   Year: string

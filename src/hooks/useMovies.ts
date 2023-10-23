@@ -3,9 +3,11 @@ import responseNoMovies from '../mocks/no-results.json'
 import moviesResults from '../mocks/with-results.json'
 import { type Movie, Type } from '../types'
 
-export function useMovies({ search }) {
-  const [responseMovies, setResponseMovies] = useState()
+export function useMovies({ search }: { search: string }) {
+  const [responseMovies, setResponseMovies] = useState<Movie[] | { Response: string; Error: string }>()
   const movies = moviesResults.Search
+
+  console.log({ responseMovies })
 
   const mappedMovies: Movie[] = movies.map(movie => ({
     id: movie.imdbID,
@@ -17,7 +19,7 @@ export function useMovies({ search }) {
 
   const getMovies = () => {
     if (search) {
-      setResponseMovies(moviesResults)
+      setResponseMovies(mappedMovies)
     } else {
       setResponseMovies(responseNoMovies)
     }

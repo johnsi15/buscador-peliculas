@@ -1,7 +1,15 @@
 export interface Search {
-  Search: Movie[]
+  Search: Movies[]
   totalResults: string
   Response: string
+}
+
+export interface Movies {
+  imdbID: string
+  Title: string
+  Year: string
+  Type: string
+  Poster: string
 }
 
 export interface Movie {

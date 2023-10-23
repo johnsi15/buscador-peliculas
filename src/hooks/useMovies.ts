@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import responseNoMovies from '../mocks/no-results.json'
 // import moviesResults from '../mocks/with-results.json'
-import { type Movie, Type, Search } from '../types'
+import { type Movie, Type, ResponseErrorMovie } from '../types'
 
 export function useMovies({ search }: { search: string }) {
-  const [responseMovies, setResponseMovies] = useState<Movie[] | { Response: string; Error: string }>()
+  const [responseMovies, setResponseMovies] = useState<Movie[] | ResponseErrorMovie>([])
   // const movies = moviesResults.Search
-
-  console.log({ responseMovies })
 
   interface Movies {
     imdbID: string
@@ -38,14 +36,21 @@ export function useMovies({ search }: { search: string }) {
 
           return res.json()
         })
-        .then((data: Search) => {
-          const movies = mappedMovies({ movies: data.Search })
-          setResponseMovies(movies)
+        .then(data => {
+          if (data.Response === 'True') {
+            const movies = mappedMovies({ movies: data.Search })
+            setResponseMovies(movies)
+          } else {
+            setResponseMovies(data)
+          }
+        })
+        .catch(error => {
+          console.log('algo salio mal :(', error)
         })
     } else {
       setResponseMovies(responseNoMovies)
     }
   }
 
-  return { movies: mappedMovies, getMovies }
+  return { movies: responseMovies, getMovies }
 }

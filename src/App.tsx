@@ -38,8 +38,8 @@ function useSearch() {
 }
 
 function App() {
-  const { movies } = useMovies()
   const { search, updateSearch, error } = useSearch()
+  const { movies } = useMovies({ search })
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault()

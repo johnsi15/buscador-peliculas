@@ -20,4 +20,9 @@ export interface Movie {
   poster: string
 }
 
+export interface ResponseErrorMovie {
+  Response: string
+  Error: string
+}
+
 export type Type = 'movie' | 'series'

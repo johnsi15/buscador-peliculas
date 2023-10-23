@@ -1,4 +1,4 @@
-import { type Movie, ResponseErrorMovie } from '../types'
+import { type Movie, Search } from '../types'
 function ListOfMovies({ movies }: { movies: Movie[] }) {
   return (
     <ul className='movies'>
@@ -17,8 +17,8 @@ function NoMovies() {
   return <p>No se encontraron películas para esta búsqueda.</p>
 }
 
-export function Movies({ movies }: { movies: Movie[] | ResponseErrorMovie }) {
-  const hasMovies = movies && Array.isArray(movies) && movies.length > 0
+export function Movies({ movies }: { movies: Movie[] | Search }) {
+  const hasMovies = Array.isArray(movies) && movies.length > 0
 
   return hasMovies ? <ListOfMovies movies={movies} /> : <NoMovies />
 }

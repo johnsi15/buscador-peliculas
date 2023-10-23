@@ -39,7 +39,7 @@ function useSearch() {
 
 function App() {
   const { search, updateSearch, error } = useSearch()
-  const { movies } = useMovies({ search })
+  const { movies, getMovies } = useMovies({ search })
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault()
@@ -48,6 +48,7 @@ function App() {
     // console.log(fields)
 
     console.log({ search })
+    getMovies()
   }
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = event => {

@@ -1,19 +1,23 @@
 import { useState } from 'react'
 import responseNoMovies from '../mocks/no-results.json'
 // import moviesResults from '../mocks/with-results.json'
-import { type Movie, Type, ResponseErrorMovie } from '../types'
+import { type Movie, Movies, Type, Search } from '../types'
+
+function request<Response>(url: string, config: RequestInit = {}): Promise<Response> {
+  return fetch(url, config)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
+      return res.json()
+    })
+    .then(data => data as Response)
+}
 
 export function useMovies({ search }: { search: string }) {
-  const [responseMovies, setResponseMovies] = useState<Movie[] | ResponseErrorMovie>([])
+  const [responseMovies, setResponseMovies] = useState<Movie[] | Search>([])
   // const movies = moviesResults.Search
-
-  interface Movies {
-    imdbID: string
-    Title: string
-    Year: string
-    Type: string
-    Poster: string
-  }
 
   const mappedMovies = ({ movies }: { movies: Movies[] }) => {
     return movies.map(movie => ({
@@ -25,28 +29,17 @@ export function useMovies({ search }: { search: string }) {
     }))
   }
 
-  const getMovies = () => {
+  const getMovies = async () => {
     if (search) {
       // setResponseMovies(mappedMovies)
-      fetch(`https://www.omdbapi.com/?apikey=c2feec24&s=${search}`)
-        .then(res => {
-          if (!res.ok) {
-            throw new Error(res.statusText)
-          }
+      const data = await request<Search>(`https://www.omdbapi.com/?apikey=c2feec24&s=${search}`)
 
-          return res.json()
-        })
-        .then(data => {
-          if (data.Response === 'True') {
-            const movies = mappedMovies({ movies: data.Search })
-            setResponseMovies(movies)
-          } else {
-            setResponseMovies(data)
-          }
-        })
-        .catch(error => {
-          console.log('algo salio mal :(', error)
-        })
+      if (data.Search && data.Response === 'True') {
+        const movies = mappedMovies({ movies: data.Search })
+        setResponseMovies(movies)
+      } else {
+        setResponseMovies(data)
+      }
     } else {
       setResponseMovies(responseNoMovies)
     }

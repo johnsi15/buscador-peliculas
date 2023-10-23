@@ -1,7 +1,8 @@
 export interface Search {
-  Search: Movies[]
-  totalResults: string
+  Search?: Movies[]
+  totalResults?: string
   Response: string
+  Error?: string
 }
 
 export interface Movies {
@@ -18,11 +19,6 @@ export interface Movie {
   id: string
   type: Type
   poster: string
-}
-
-export interface ResponseErrorMovie {
-  Response: string
-  Error: string
 }
 
 export type Type = 'movie' | 'series'

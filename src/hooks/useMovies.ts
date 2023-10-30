@@ -1,49 +1,26 @@
 import { useState } from 'react'
-import responseNoMovies from '../mocks/no-results.json'
-// import moviesResults from '../mocks/with-results.json'
-import { type Movie, MovieApi, Type, ApiResponse } from '../types'
-
-function request<Response>(url: string, config: RequestInit = {}): Promise<Response> {
-  return fetch(url, config)
-    .then(res => {
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
-
-      return res.json()
-    })
-    .then(data => data as Response)
-}
+import { type Movie } from '../types'
+import { searchMovies } from '../services/movies'
 
 export function useMovies({ search }: { search: string }) {
-  const [responseMovies, setResponseMovies] = useState<Movie[] | ApiResponse>([])
-  // const movies = moviesResults.Search
-
-  const mappedMovies = ({ movies }: { movies: MovieApi[] }) => {
-    return movies.map(movie => ({
-      id: movie.imdbID,
-      title: movie.Title,
-      year: movie.Year,
-      type: movie.Type as Type,
-      poster: movie.Poster,
-    }))
-  }
+  const [movies, setMovies] = useState<Movie[] | undefined>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const getMovies = async () => {
-    if (search) {
-      // setResponseMovies(mappedMovies)
-      const data = await request<ApiResponse>(`https://www.omdbapi.com/?apikey=c2feec24&s=${search}`)
-
-      if (data.Search && data.Response === 'True') {
-        const movies = mappedMovies({ movies: data.Search })
-        setResponseMovies(movies)
-      } else {
-        setResponseMovies(data)
+    try {
+      setLoading(true)
+      setError(null)
+      const newMovies = await searchMovies({ search })
+      setMovies(newMovies)
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message)
       }
-    } else {
-      setResponseMovies(responseNoMovies)
+    } finally {
+      setLoading(false)
     }
   }
 
-  return { movies: responseMovies, getMovies }
+  return { movies, getMovies, error }
 }

@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { type Movie } from '../types'
 import { searchMovies } from '../services/movies'
 
-export function useMovies({ search }: { search: string }) {
+export function useMovies({ search, sort }: { search: string; sort: boolean }) {
   const [movies, setMovies] = useState<Movie[] | undefined>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -28,5 +28,7 @@ export function useMovies({ search }: { search: string }) {
     }
   }
 
-  return { movies, getMovies, loading, error }
+  const sortedMovies = movies && sort ? [...movies].sort((a, b) => a.title.localeCompare(b.title)) : movies
+
+  return { movies: sortedMovies, getMovies, loading, error }
 }

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { type Movie } from '../types'
 import { searchMovies } from '../services/movies'
 
@@ -27,8 +27,12 @@ export function useMovies({ search, sort }: { search: string; sort: boolean }) {
       setLoading(false)
     }
   }
-
-  const sortedMovies = movies && sort ? [...movies].sort((a, b) => a.title.localeCompare(b.title)) : movies
+  // const sortedMovies = movies && sort ? [...movies].sort((a, b) => a.title.localeCompare(b.title)) : movies
+  // Evitamos cada vez que el search cambia vuelva a calcular el sort, cuando vale la pena ej: Cuando tenemos un array con 1.000 items
+  const sortedMovies = useMemo(() => {
+    console.log('memoSortedMovies')
+    return movies && sort ? [...movies].sort((a, b) => a.title.localeCompare(b.title)) : movies
+  }, [sort, movies])
 
   return { movies: sortedMovies, getMovies, loading, error }
 }

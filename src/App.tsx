@@ -1,4 +1,5 @@
-import { FormEventHandler, useState, ChangeEventHandler, useEffect, useRef } from 'react'
+import { FormEventHandler, useState, ChangeEventHandler, useEffect, useRef, useCallback } from 'react'
+import debounce from 'just-debounce-it'
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
 import './App.css'
@@ -42,6 +43,15 @@ function App() {
   const [sort, setSort] = useState(false)
   const { movies, getMovies, loading } = useMovies({ search, sort })
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedGetMovies = useCallback(
+    debounce((search: string) => {
+      console.log({ search })
+      getMovies({ search })
+    }, 300),
+    [getMovies]
+  )
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault()
 
@@ -56,6 +66,7 @@ function App() {
     const { value } = event.target
 
     updateSearch(value)
+    debouncedGetMovies(value)
   }
 
   const handleSort = () => {

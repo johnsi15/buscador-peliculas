@@ -22,5 +22,5 @@ export function useMovies({ search }: { search: string }) {
     }
   }
 
-  return { movies, getMovies, error }
+  return { movies, getMovies, loading, error }
 }

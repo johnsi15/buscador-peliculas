@@ -49,7 +49,7 @@ function App() {
     // console.log(fields)
 
     console.log({ search })
-    getMovies()
+    getMovies({ search })
   }
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = event => {

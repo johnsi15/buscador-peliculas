@@ -46,7 +46,7 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedGetMovies = useCallback(
     debounce((search: string) => {
-      console.log({ search })
+      // console.log({ search })
       getMovies({ search })
     }, 300),
     [getMovies]
@@ -58,7 +58,7 @@ function App() {
     // const fields = Object.fromEntries(new FormData(event.currentTarget)) // Forma NO controlada
     // console.log(fields)
 
-    console.log({ search })
+    // console.log({ search })
     getMovies({ search })
   }
 
@@ -86,7 +86,10 @@ function App() {
             name='query'
             placeholder='Avengers, The Matrix, Star Wars...'
           />
-          <input type='checkbox' name='sort' onChange={handleSort} checked={sort} />
+          <label htmlFor='order'>
+            Ordenar
+            <input id='order' type='checkbox' name='sort' onChange={handleSort} checked={sort} />
+          </label>
           <button type='submit'>Buscar</button>
         </form>
         {error && <p className='error'>{error}</p>}

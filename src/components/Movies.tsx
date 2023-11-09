@@ -1,4 +1,4 @@
-import { type Movie, Search } from '../types'
+import { type Movie } from '../types'
 function ListOfMovies({ movies }: { movies: Movie[] }) {
   return (
     <ul className='movies'>
@@ -17,7 +17,7 @@ function NoMovies() {
   return <p>No se encontraron películas para esta búsqueda.</p>
 }
 
-export function Movies({ movies }: { movies: Movie[] | Search }) {
+export function Movies({ movies }: { movies: Movie[] | undefined }) {
   const hasMovies = Array.isArray(movies) && movies.length > 0
 
   return hasMovies ? <ListOfMovies movies={movies} /> : <NoMovies />

@@ -1,42 +1,9 @@
-import { FormEventHandler, useState, ChangeEventHandler, useEffect, useRef, useCallback } from 'react'
+import { FormEventHandler, useState, ChangeEventHandler, useCallback } from 'react'
 import debounce from 'just-debounce-it'
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
+import { useSearch } from './hooks/useSearch'
 import './App.css'
-
-function useSearch() {
-  const [search, updateSearch] = useState('') // Forma controlada
-  const [error, setError] = useState<null | string>(null)
-  const isFirstInput = useRef(true)
-
-  useEffect(() => {
-    if (isFirstInput.current) {
-      isFirstInput.current = search === ''
-      return
-    }
-
-    if (search.startsWith(' ')) return
-
-    if (search === '') {
-      setError('No se pueden buscar peliculas vacias')
-      return
-    }
-
-    if (search.match(/^\d+$/)) {
-      setError('No se pueden buscar peliculas con un numero')
-      return
-    }
-
-    if (search.length < 3) {
-      setError('La busqueda debe tener al menos 3 caracteres')
-      return
-    }
-
-    setError(null)
-  }, [search])
-
-  return { search, updateSearch, error }
-}
 
 function App() {
   const { search, updateSearch, error } = useSearch()

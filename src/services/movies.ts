@@ -11,19 +11,28 @@ function request<Response>(url: string, config: RequestInit = {}): Promise<Respo
     .then(data => data as Response)
 }
 
-export async function searchMovies({ search }: { search: string }) {
+export async function searchMovies({ search, currentPage = 1 }: { search: string; currentPage: number }) {
   if (search === '') null
 
-  try {
-    const movies = await request<ApiResponse>(`https://www.omdbapi.com/?apikey=c2feec24&s=${search}`)
+  console.log('current page movies services -> ' + currentPage)
+  console.log({ search })
 
-    return movies.Search?.map(movie => ({
-      id: movie.imdbID,
-      title: movie.Title,
-      year: movie.Year,
-      type: movie.Type as Type,
-      poster: movie.Poster,
-    }))
+  try {
+    const movies = await request<ApiResponse>(
+      `https://www.omdbapi.com/?apikey=c2feec24&s=${search}&page=${currentPage}`
+    )
+
+    if (movies.Response === 'True') {
+      return movies.Search?.map(movie => ({
+        id: movie.imdbID,
+        title: movie.Title,
+        year: movie.Year,
+        type: movie.Type as Type,
+        poster: movie.Poster,
+      }))
+    }
+
+    return []
   } catch (error) {
     throw new Error('Error searching movies')
   }

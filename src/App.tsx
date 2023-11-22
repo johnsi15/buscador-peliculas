@@ -8,7 +8,9 @@ import './App.css'
 function App() {
   const { search, updateSearch, error } = useSearch()
   const [sort, setSort] = useState(false)
-  const { movies, getMovies, loading } = useMovies({ search, sort })
+  const { movies, getMovies, loading, handleMoreMovies } = useMovies({ search, sort })
+
+  console.log({ movies })
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedGetMovies = useCallback(
@@ -61,7 +63,11 @@ function App() {
         </form>
         {error && <p className='error'>{error}</p>}
       </header>
-      <main>{loading ? <p>Cargando...</p> : <Movies movies={movies} />}</main>
+      <main>
+        {movies && <Movies movies={movies} />}
+        {loading && <p>Cargando...</p>}
+        {!loading && movies && movies?.length > 0 && <button onClick={handleMoreMovies}>Cargar más resultados</button>}
+      </main>
     </>
   )
 }

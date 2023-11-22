@@ -44,7 +44,7 @@ function App() {
     <>
       <header>
         <h1>Buscador de películas</h1>
-        <form className='form' onSubmit={handleSubmit}>
+        <form className='form' onSubmit={handleSubmit} aria-label='Buscar películas'>
           <input
             style={{ border: error ? '1px solid red' : 'none' }}
             onChange={handleChange}

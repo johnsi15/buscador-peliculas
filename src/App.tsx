@@ -6,7 +6,7 @@ import { useSearch } from './hooks/useSearch'
 import './App.css'
 
 function App() {
-  const { search, updateSearch, error } = useSearch()
+  const { search, getUpdateSearch, error } = useSearch()
   const [sort, setSort] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const { movies, getMovies, loading } = useMovies({ search, sort, currentPage })
@@ -17,7 +17,8 @@ function App() {
   const debouncedGetMovies = useCallback(
     debounce((search: string) => {
       // console.log({ search })
-      getMovies({ search, currentPage })
+      getMovies({ search, currentPage: 1 })
+      setCurrentPage(1)
     }, 300),
     [getMovies]
   )
@@ -36,7 +37,8 @@ function App() {
   const handleChange: ChangeEventHandler<HTMLInputElement> = event => {
     const { value } = event.target
 
-    updateSearch(value)
+    // updateSearch(value)
+    getUpdateSearch({ search: value })
     debouncedGetMovies(value)
   }
 

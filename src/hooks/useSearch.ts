@@ -30,5 +30,9 @@ export function useSearch() {
     setError(null)
   }, [search])
 
-  return { search, updateSearch, error }
+  const getUpdateSearch = ({ search }: { search: string }) => {
+    updateSearch(search)
+  }
+
+  return { search, getUpdateSearch, error }
 }

@@ -30,14 +30,12 @@ function App() {
     // console.log(fields)
 
     // console.log({ search })
-    getMovies({ search, currentPage: 1 })
-    setCurrentPage(1)
+    getMovies({ search, currentPage })
   }
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = event => {
     const { value } = event.target
 
-    // updateSearch(value)
     getUpdateSearch({ search: value })
     debouncedGetMovies(value)
   }
@@ -48,7 +46,6 @@ function App() {
 
   const handleMoreMovies = () => {
     setCurrentPage(currentPage + 1)
-    console.log({ currentPage })
   }
 
   return (

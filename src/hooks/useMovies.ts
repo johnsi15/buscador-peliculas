@@ -21,16 +21,7 @@ export function useMovies({ search, sort, currentPage }: { search: string; sort:
       setLoading(true)
       setError(null)
 
-      console.log('render component')
-      console.log({ currentPage })
-
       previousPage.current = currentPage
-
-      if (previousSearch.current !== search) {
-        console.log('paso por acá...')
-        previousPage.current = 1
-      }
-
       previousSearch.current = search
 
       if (search === '') {
@@ -38,11 +29,9 @@ export function useMovies({ search, sort, currentPage }: { search: string; sort:
         return
       }
 
-      const newMovies = await searchMovies({ search, currentPage: previousPage.current })
+      const newMovies = await searchMovies({ search, currentPage })
 
-      console.log({ newMovies })
-
-      if (previousPage.current > 1 && previousSearch.current === search) {
+      if (currentPage > 1) {
         setMovies(prevMovies => (prevMovies && newMovies ? prevMovies.concat(newMovies) : newMovies))
         return
       }

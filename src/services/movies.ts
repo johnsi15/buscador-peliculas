@@ -14,9 +14,6 @@ function request<Response>(url: string, config: RequestInit = {}): Promise<Respo
 export async function searchMovies({ search, currentPage = 1 }: { search: string; currentPage: number }) {
   if (search === '') null
 
-  console.log('current page movies services -> ' + currentPage)
-  console.log({ search })
-
   try {
     const movies = await request<ApiResponse>(
       `https://www.omdbapi.com/?apikey=c2feec24&s=${search}&page=${currentPage}`

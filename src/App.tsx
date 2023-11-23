@@ -8,15 +8,16 @@ import './App.css'
 function App() {
   const { search, updateSearch, error } = useSearch()
   const [sort, setSort] = useState(false)
-  const { movies, getMovies, loading, handleMoreMovies } = useMovies({ search, sort })
+  const [currentPage, setCurrentPage] = useState(1)
+  const { movies, getMovies, loading } = useMovies({ search, sort, currentPage })
 
-  console.log({ movies })
+  // console.log({ movies })
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedGetMovies = useCallback(
     debounce((search: string) => {
       // console.log({ search })
-      getMovies({ search })
+      getMovies({ search, currentPage })
     }, 300),
     [getMovies]
   )
@@ -28,7 +29,8 @@ function App() {
     // console.log(fields)
 
     // console.log({ search })
-    getMovies({ search })
+    getMovies({ search, currentPage: 1 })
+    setCurrentPage(1)
   }
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = event => {
@@ -40,6 +42,11 @@ function App() {
 
   const handleSort = () => {
     setSort(!sort)
+  }
+
+  const handleMoreMovies = () => {
+    setCurrentPage(currentPage + 1)
+    console.log({ currentPage })
   }
 
   return (

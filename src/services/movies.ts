@@ -12,30 +12,34 @@ function request<Response>(url: string, config: RequestInit = {}): Promise<Respo
     .then(data => data as Response)
 }
 
+function getMoviesTest({ search, currentPage }: { search: string; currentPage: number }) {
+  const mapMovie = (movie: MovieApi) => ({
+    id: movie.imdbID,
+    title: movie.Title,
+    year: movie.Year,
+    type: movie.Type as Type,
+    poster: movie.Poster,
+  })
+
+  const movies = responseMovies.Search.map(mapMovie)
+
+  if (search === 'nothingmovie') {
+    return []
+  }
+
+  if (currentPage === 2) {
+    return responseMovies.PageTest.map(mapMovie)
+  }
+
+  return movies
+}
+
 export async function searchMovies({ search, currentPage = 1 }: { search: string; currentPage: number }) {
   if (search === '') null
 
   try {
     if (import.meta.env.TEST) {
-      const mapMovie = (movie: MovieApi) => ({
-        id: movie.imdbID,
-        title: movie.Title,
-        year: movie.Year,
-        type: movie.Type as Type,
-        poster: movie.Poster,
-      })
-
-      const movies = responseMovies.Search.map(mapMovie)
-
-      if (search === 'nothingmovie') {
-        return []
-      }
-
-      if (currentPage === 2) {
-        return responseMovies.PageTest.map(mapMovie)
-      }
-
-      return movies
+      return getMoviesTest({ search, currentPage })
     }
 
     const movies = await request<ApiResponse>(

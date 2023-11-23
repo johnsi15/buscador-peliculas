@@ -1,4 +1,5 @@
-import { ApiResponse, Type } from '../types'
+import { ApiResponse, MovieApi, Type } from '../types'
+import responseMovies from '../mocks/with-results.json'
 function request<Response>(url: string, config: RequestInit = {}): Promise<Response> {
   return fetch(url, config)
     .then(res => {
@@ -15,6 +16,28 @@ export async function searchMovies({ search, currentPage = 1 }: { search: string
   if (search === '') null
 
   try {
+    if (import.meta.env.TEST) {
+      const mapMovie = (movie: MovieApi) => ({
+        id: movie.imdbID,
+        title: movie.Title,
+        year: movie.Year,
+        type: movie.Type as Type,
+        poster: movie.Poster,
+      })
+
+      const movies = responseMovies.Search.map(mapMovie)
+
+      if (search === 'nothingmovie') {
+        return []
+      }
+
+      if (currentPage === 2) {
+        return responseMovies.PageTest.map(mapMovie)
+      }
+
+      return movies
+    }
+
     const movies = await request<ApiResponse>(
       `https://www.omdbapi.com/?apikey=c2feec24&s=${search}&page=${currentPage}`
     )

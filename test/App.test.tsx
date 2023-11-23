@@ -42,11 +42,48 @@ describe('<App />', () => {
       expect(list.childNodes.length).toBeGreaterThan(1)
     })
 
+    userEvent.clear(input)
+
     await user.type(input, 'nothingmovie')
     await user.click(button!)
 
     await waitFor(() => {
       screen.getByText('No se encontraron películas para esta búsqueda.')
+    })
+  })
+
+  test('should load more movies scroll infinite', async () => {
+    const user = userEvent.setup()
+
+    const input = screen.getByRole('textbox')
+    expect(input).toBeDefined()
+
+    const form = screen.getByRole('form')
+    expect(form).toBeDefined()
+
+    const button = form.querySelector('button')
+    expect(button).toBeDefined()
+
+    const MOVIE_TEXT = 'the matrix'
+
+    await user.type(input, MOVIE_TEXT)
+    await user.click(button!)
+
+    await waitFor(() => {
+      const list = screen.getByRole('list')
+      expect(list).toBeDefined()
+      expect(list.childNodes.length).toBe(10)
+    })
+
+    const loadMoreButton = screen.getByRole('button', { name: 'Cargar más resultados' })
+    expect(loadMoreButton).toBeDefined()
+
+    await user.click(loadMoreButton)
+
+    await waitFor(() => {
+      const list = screen.getByRole('list')
+      expect(list).toBeDefined()
+      expect(list.childNodes.length).toBe(20)
     })
   })
 })

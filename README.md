@@ -24,3 +24,6 @@ Primera iteración:
 ✅ Haz que la búsqueda se haga automáticamente al escribir.
 
 ✅ Evita que se haga la búsqueda continuamente al escribir (debounce)
+
+
+Usando un hook para scroll infinite: https://usehooks-ts.com/react-hook/use-intersection-observer
